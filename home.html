@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Idiom Translator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>      body {
+		font-family: Arial, sans-serif;
+		background-color: #202123;
+		color: #333;
+		margin: 0;
+		padding: 0;
+	}
+		#mic-img {
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			margin-left: 5px;
+			cursor: pointer;
+			color: #F22C3D; /* set initial color of microphone icon */
+		  }
+
+	h1 {
+		text-align: center;
+		margin-top: 20px;
+		color:white;
+	}
+
+	#chat-container {
+		max-width: 600px;
+		margin: 0 auto;
+		background-color:#444654;
+
+	}
+
+	.chat-message {
+		display: flex;
+		margin-bottom: 10px;
+	}
+
+	.bot-message {
+		justify-content: flex-start;
+	}
+
+	.user-message {
+		justify-content: flex-end;
+	}
+
+	.bot-message p,
+	.user-message p {
+		padding: 10px;
+		border-radius: 10px;
+		background-color: #fff;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+		position: relative;
+	}
+
+	.bot-message p {
+		margin-right: 10px;
+	}
+
+	.user-message p {
+		margin-left: 10px;
+		background-color: #dcf8c6;
+	}
+
+	.bot-message p::after {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 100%;
+		width: 0;
+		height: 0;
+		border-top: 8px solid transparent;
+		border-bottom: 8px solid transparent;
+		border-left: 8px solid #fff;
+		margin-top: -8px;
+		margin-left: 5px;
+		animation: botTyping 0.1s steps(8) 1s forwards;
+		display: none;
+	}
+
+	.bot-message p.show::after {
+		display: block;
+	}
+
+	@keyframes botTyping {
+		from {
+			width: 0;
+		}
+		to {
+			width: 8px;
+		}
+	}
+
+	form {
+		max-width: 600px;
+
+		display: flex;
+		align-items: center;
+		background-color:#444654
+	}
+
+	label {
+		margin-right: 10px;
+		margin-bottom:10px;
+	}
+	input{
+
+	}
+
+	input[type="text"] {
+		flex-grow: 1;
+		padding: 5px;
+		font-size: 16px;
+		border-radius: 5px;
+		border: none;
+		background-color:white;
+		margin:0;
+	}
+
+	input[type="submit"] {
+		padding: 5px 10px;
+		background-color: #4CAF50;
+		color: #fff;
+		font-size: 16px;
+		border-radius: 5px;
+		border: none;
+		cursor: pointer;
+
+
+	}
+
+
+	input[type="submit"]:hover {
+		background-color: #3e8e41;
+
+
+	}
+	.bor{
+		border:3px solid gray;
+
+		max-width: 600px;
+
+		margin: 0 auto;
+	}
+	#input-form{
+		background-color:#444654
+	}
+
+
+	</style>
+</head>
+<body>
+	<div class='back'>
+    <h1>Idiom Translator</h1>
+	<div class="bor">
+    <div id="chat-container">
+        <div class="chat-message bot-message">
+            <p>Welcome! Please enter an idiom:</p>
+        </div>
+    </div>
+    <form id="input-form" style="background-color:#444654;">
+
+        <input type="text" id="input-field">
+        <input type="submit" class="first" value="Translate">
+        <i class="fas fa-microphone" id="mic-img"></i>
+    </form>
+
+
+</div>
+
+
+    <script>
+		window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+		if (window.SpeechRecognition) {
+			const recognition = new SpeechRecognition();
+			recognition.interimResults = true;
+
+			document.querySelector("#mic-img").addEventListener("click", () => {
+				recognition.start();
+			});
+
+			recognition.addEventListener("result", (e) => {
+				const transcript = Array.from(e.results)
+					.map((result) => result[0])
+					.map((result) => result.transcript)
+					.join("");
+				document.querySelector("#input-field").value = transcript;
+			});
+		}
+	</script>
+    <script>
+        $(document).ready(function() {
+            $("#input-form").submit(function(event) {
+                event.preventDefault();
+                var inputVal = $("#input-field").val();
+                if (inputVal.trim() == "") {
+                    return;
+                }
+                $("#input-field").val("");
+                $("#chat-container").append('<div class="chat-message user-message"><p><strong>You:</strong>' + inputVal + '</p></div>');
+                $.ajax({
+                    url: "/predict",
+                    type: "POST",
+                    data: { idiom: inputVal },
+                    success: function(data) {
+                        $("#chat-container").append('<div class="chat-message bot-message">' + data + '</div>');
+                    }
+
+                });
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

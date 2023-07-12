@@ -1,0 +1,35 @@
+{% set len = namespace() %}
+{% set len.len = 0 %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Evaluation</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      tr:hover {
+        background-color: #f5f5f5;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Evaluation</h1>
+
+    <p>Accuracy: {{ accuracy }}</p>
+    <p>Precision: {{ precision }}</p>
+    <p>Recall: {{ recall }}</p>
+
+
+
+  </body>
+</html>

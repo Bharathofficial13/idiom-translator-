@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #202123;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .chat-message {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .bot-message {
+            justify-content: flex-start;
+        }
+
+        .user-message {
+            justify-content: flex-end;
+        }
+
+        .bot-message p,
+        .user-message p {
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .bot-message p {
+            margin-right: 10px;
+        }
+
+        .user-message p {
+            margin-left: 10px;
+            background-color: #dcf8c6;
+        }
+
+        .bot-message p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 8px solid #fff;
+            margin-top: -8px;
+            margin-left: 5px;
+            animation: botTyping 0.1s steps(8) 1s forwards;
+            display: none;
+        }
+
+        .bot-message p.show::after {
+            display: block;
+        }
+
+        @keyframes botTyping {
+            from {
+                width: 0;
+            }
+            to {
+                width: 8px;
+            }
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto 0;
+            display: flex;
+            align-items: center;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="chat-container">
+        <div class="chat-message bot-message">
+            <p><strong>bot:</strong> The original meaning of '{{ idiom }}' is:  <strong> {{ prediction }}</strong></p>
+        </div>
+    </div>
+    
+</body>
+</html>
